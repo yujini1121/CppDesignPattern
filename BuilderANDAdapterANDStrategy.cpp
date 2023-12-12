@@ -69,7 +69,7 @@ public:
 class PaymentClass
 {
 public:
-    int retentionsPoint = 0;
+    int retentionPoint = 0;
 
     virtual void pay()
     {
