@@ -64,7 +64,6 @@ public:
     }
 };
 
-
 // ######################################### 전략 패턴
 class PaymentClass
 {
@@ -93,6 +92,32 @@ public:
     }
 };
 
+// 외부 결제 시스템
+class ExternalPaymentSystem {
+public:
+    void externalPay() {
+        cout << "External Payment System" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+    }
+};
+
+// 어댑터 패턴을 사용한 외부 결제 시스템 어댑터
+class ExternalPaymentAdapter : public PaymentClass {
+private:
+    ExternalPaymentSystem* externalPaymentSystem;
+
+public:
+    ExternalPaymentAdapter() : externalPaymentSystem(new ExternalPaymentSystem()) {}
+
+    ~ExternalPaymentAdapter() {
+        delete externalPaymentSystem;
+    }
+
+    void pay() override {
+        externalPaymentSystem->externalPay();
+    }
+};
+
 // 결제를 처리하는 클래스
 class PaymentContext
 {
@@ -113,7 +138,6 @@ public:
     }
 };
 
-
 // ######################################### main 함수
 int main() {
 
@@ -121,7 +145,7 @@ int main() {
 
     cout << "==========================================================================" << endl;
     cout << "Choose an item" << endl;
-    string ingredients[] = { "Egg", "wheat flour", "carrot", "potato"};
+    string ingredients[] = { "Egg", "wheat flour", "carrot", "potato" };
     int quantities[] = { 10, 3, 1, 2 };
     int prices[] = { 4000, 3000, 800, 1800 };
     for (int i = 0; i < 4; ++i) {
@@ -149,6 +173,7 @@ int main() {
     // 결제 방법 선택
     CreditCardPayment creditCardStrategy;
     KakaoPayment kakaoStrategy;
+    ExternalPaymentAdapter externalPaymentAdapter;  
 
     cout << "==========================================================================" << endl;
     cout << "Payment Strategy" << endl;
@@ -160,6 +185,10 @@ int main() {
 
     // 카카오페이로 변경
     paymentContext.setPaymentStrategy(&kakaoStrategy);
+    paymentContext.processPayment();
+
+    // 외부 결제 시스템으로 결제
+    paymentContext.setPaymentStrategy(&externalPaymentAdapter);
     paymentContext.processPayment();
 
     return 0;
