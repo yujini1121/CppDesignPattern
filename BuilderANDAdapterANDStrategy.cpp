@@ -55,6 +55,7 @@ public:
             break;
         default:
             cout << "Invalid item number." << endl;
+            break;
         }
         return *this;
     }
@@ -82,6 +83,27 @@ public:
     }
 };
 
+// 무통장 입금 결제 전략
+class DepositPayment : public PaymentClass
+{
+public:
+    void pay() override
+    {
+        cout << "Deposit" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+    }
+};
+
+// 휴대폰 결제 전략
+class PhonePayment : public PaymentClass {
+public:
+    void pay() override
+    {
+        cout << "Phone plan" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+    }
+};
+
 // 카카오페이 결제 전략
 class KakaoPayment : public PaymentClass {
 public:
@@ -101,6 +123,8 @@ public:
     }
 };
 
+
+// ######################################### 어댑터 패턴
 // 어댑터 패턴을 사용한 외부 결제 시스템 어댑터
 class ExternalPaymentAdapter : public PaymentClass {
 private:
@@ -170,14 +194,48 @@ int main() {
     Product shoppingCart = builder.build();
     shoppingCart.showDetails();
 
+
+
     // 결제 방법 선택
     CreditCardPayment creditCardStrategy;
+    DepositPayment depositStrategy;
+    PhonePayment phoneStrategy;
     KakaoPayment kakaoStrategy;
-    ExternalPaymentAdapter externalPaymentAdapter;  
+    ExternalPaymentAdapter externalPaymentAdapter;
 
     cout << "==========================================================================" << endl;
-    cout << "Payment Strategy" << endl;
+    cout << "Choose the Payment Strategy" << endl;
+
+    cout << "1. Credit Card" << endl;
+    cout << "2. Deposit" << endl;
+    cout << "3. Phone Plan" << endl;
+    cout << "4. KakaoPay" << endl;
+    cout << "5. ExternalPayment" << endl;
     cout << "==========================================================================" << endl;
+
+    do
+    {
+        cout << "Enter the payment strategy number (1-5): ";
+
+        int input;
+        cin >> input;
+
+        if (!((1 <= input) && (input <= 5)))
+        {
+            cout << "Fail : Enter the payment strategy number (1-4)";
+            break;
+        }
+    } while (true);
+
+
+
+
+
+
+
+
+
+
 
     // 신용 카드로 결제
     PaymentContext paymentContext(&creditCardStrategy);
