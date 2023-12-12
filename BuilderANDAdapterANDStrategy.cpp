@@ -69,7 +69,12 @@ public:
 class PaymentClass
 {
 public:
-    virtual void pay() = 0;
+    int retentionsPoint = 0;
+
+    virtual void pay()
+    {
+        cout << "Retention points: " << retentionPoint << endl;
+    }
 };
 
 // 신용 카드 결제 전략
@@ -79,7 +84,7 @@ public:
     void pay() override
     {
         cout << "Credit Card" << endl;
-        cout << "Payment Amount : " << total << endl << endl;
+        cout << "Payment Amount: " << total << endl << endl;
     }
 };
 
@@ -90,7 +95,7 @@ public:
     void pay() override
     {
         cout << "Deposit" << endl;
-        cout << "Payment Amount : " << total << endl << endl;
+        cout << "Payment Amount: " << total << endl << endl;
     }
 };
 
@@ -100,7 +105,7 @@ public:
     void pay() override
     {
         cout << "Phone plan" << endl;
-        cout << "Payment Amount : " << total << endl << endl;
+        cout << "Payment Amount: " << total << endl << endl;
     }
 };
 
@@ -110,7 +115,7 @@ public:
     void pay() override
     {
         cout << "Kakao Pay" << endl;
-        cout << "Payment Amount : " << total << endl << endl;
+        cout << "Payment Amount: " << total << endl << endl;
     }
 };
 
@@ -119,7 +124,7 @@ class ExternalPaymentSystem {
 public:
     void externalPay() {
         cout << "External Payment System" << endl;
-        cout << "Payment Amount : " << total << endl << endl;
+        cout << "Payment Amount: " << total << endl << endl;
     }
 };
 
@@ -210,7 +215,7 @@ int main() {
     cout << "2. Deposit" << endl;
     cout << "3. Phone Plan" << endl;
     cout << "4. KakaoPay" << endl;
-    cout << "5. ExternalPayment" << endl;
+    cout << "5. External Payment" << endl;
     cout << "==========================================================================" << endl;
 
     do
@@ -220,9 +225,9 @@ int main() {
         int input;
         cin >> input;
 
-        if (!((1 <= input) && (input <= 5)))
+        if (!((1 <= input)))
         {
-            cout << "Fail : Enter the payment strategy number (1-4)";
+            cout << "Fail: Enter the payment strategy number (1-4)";
             break;
         }
     } while (true);
