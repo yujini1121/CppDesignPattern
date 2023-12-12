@@ -218,29 +218,37 @@ int main() {
     cout << "5. External Payment" << endl;
     cout << "==========================================================================" << endl;
 
-    do
+    cout << "Enter the payment strategy number (1-5): ";
+
+    int input;
+    cin >> input;
+
+    switch (input)
     {
-        cout << "Enter the payment strategy number (1-5): ";
-
-        int input;
-        cin >> input;
-
-        if (!((1 <= input)))
-        {
-            cout << "Fail: Enter the payment strategy number (1-4)";
-            break;
-        }
-    } while (true);
-
-
-
-
-
-
-
-
-
-
+    case 1:
+        cout << "Credit Card" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+        break;
+    case 2:
+        cout << "Deposit" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+        break;
+    case 3:
+        cout << "Phone Plan" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+        break;
+    case 4:
+        cout << "KakaoPay" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+        break;
+    case 5:
+        cout << "External Payment" << endl;
+        cout << "Payment Amount : " << total << endl << endl;
+        break;
+    default:
+        cout << "Fail: Retry" << endl << endl;
+        break;
+    }
 
     // 신용 카드로 결제
     PaymentContext paymentContext(&creditCardStrategy);
