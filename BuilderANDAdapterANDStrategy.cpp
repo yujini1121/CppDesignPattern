@@ -128,7 +128,6 @@ public:
     }
 };
 
-
 // ######################################### 어댑터 패턴
 // 어댑터 패턴을 사용한 외부 결제 시스템 어댑터
 class ExternalPaymentAdapter : public PaymentClass {
@@ -136,11 +135,7 @@ private:
     ExternalPaymentSystem* externalPaymentSystem;
 
 public:
-    ExternalPaymentAdapter() : externalPaymentSystem(new ExternalPaymentSystem()) {}
-
-    ~ExternalPaymentAdapter() {
-        delete externalPaymentSystem;
-    }
+    ExternalPaymentAdapter(ExternalPaymentSystem* externalSystem) : externalPaymentSystem(externalSystem) {}
 
     void pay() override {
         externalPaymentSystem->externalPay();
@@ -169,7 +164,6 @@ public:
 
 // ######################################### main 함수
 int main() {
-
     ProductBuilder builder;
 
     cout << "==========================================================================" << endl;
@@ -199,14 +193,13 @@ int main() {
     Product shoppingCart = builder.build();
     shoppingCart.showDetails();
 
-
-
     // 결제 방법 선택
     CreditCardPayment creditCardStrategy;
     DepositPayment depositStrategy;
     PhonePayment phoneStrategy;
     KakaoPayment kakaoStrategy;
-    ExternalPaymentAdapter externalPaymentAdapter;
+    ExternalPaymentSystem externalSystem;
+    ExternalPaymentAdapter externalPaymentAdapter(&externalSystem);
 
     cout << "==========================================================================" << endl;
     cout << "Choose the Payment Strategy" << endl;
@@ -223,44 +216,48 @@ int main() {
     int input;
     cin >> input;
 
+    PaymentContext paymentContext(&creditCardStrategy); // paymentContext 초기화
+
     switch (input)
     {
     case 1:
         cout << "Credit Card" << endl;
         cout << "Payment Amount : " << total << endl << endl;
+        // 신용 카드로 결제
+        paymentContext.processPayment();
         break;
     case 2:
         cout << "Deposit" << endl;
         cout << "Payment Amount : " << total << endl << endl;
+        // 무통장 입금으로 결제
+        paymentContext.setPaymentStrategy(&depositStrategy);
+        paymentContext.processPayment();
         break;
     case 3:
         cout << "Phone Plan" << endl;
         cout << "Payment Amount : " << total << endl << endl;
+        // 휴대폰으로 결제
+        paymentContext.setPaymentStrategy(&phoneStrategy);
+        paymentContext.processPayment();
         break;
     case 4:
         cout << "KakaoPay" << endl;
         cout << "Payment Amount : " << total << endl << endl;
+        // 카카오페이로 결제
+        paymentContext.setPaymentStrategy(&kakaoStrategy);
+        paymentContext.processPayment();
         break;
     case 5:
         cout << "External Payment" << endl;
         cout << "Payment Amount : " << total << endl << endl;
+        // 외부 결제 시스템으로 결제
+        paymentContext.setPaymentStrategy(&externalPaymentAdapter);
+        paymentContext.processPayment();
         break;
     default:
         cout << "Fail: Retry" << endl << endl;
         break;
     }
-
-    // 신용 카드로 결제
-    PaymentContext paymentContext(&creditCardStrategy);
-    paymentContext.processPayment();
-
-    // 카카오페이로 변경
-    paymentContext.setPaymentStrategy(&kakaoStrategy);
-    paymentContext.processPayment();
-
-    // 외부 결제 시스템으로 결제
-    paymentContext.setPaymentStrategy(&externalPaymentAdapter);
-    paymentContext.processPayment();
 
     return 0;
 }
